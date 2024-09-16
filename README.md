@@ -2,4 +2,4 @@
 
 GitHub Action for GoModeler
 
-**See:** https://github.com/toolsascode/gomodeler
+**See:** <https://github.com/toolsascode/gomodeler>
