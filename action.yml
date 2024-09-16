@@ -97,6 +97,7 @@ runs:
     - name: Rendering template
       shell: bash
       run: |
+        export PATH=${PATH}:`go env GOPATH`/bin
         gomodeler -f ./envFile.yaml \
         --template-path ./template \
         --output-path ${{ inputs.output-path }} \
