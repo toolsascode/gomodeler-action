@@ -51,6 +51,7 @@ runs:
       run: |
         mkdir -p ./template && rm -rf ./template/*
         mkdir -p "${{ inputs.output-path }}" && rm -rf "${{ inputs.output-path }}"/*
+        echo "" > envFile.yaml
     - if: ${{ inputs.environments != '' }}
       name: List of environments
       shell: bash
