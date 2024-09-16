@@ -1,0 +1,106 @@
+name: 'Go Modeler for File Templates'
+description: 'Create and compile your file templates for deploy, Github Step Summary and others with ease.'
+
+branding:
+  icon: 'file-text'
+  color: 'green'
+
+inputs:
+  go-setup:
+    description: 'Go setup'
+    required: false
+    default: 'true'
+  log-level:
+    description: 'Debug enable'
+    required: false
+    default: 'info'
+  env:
+    description: 'List of environments'
+    required: false
+    default: ""
+  env-file:
+    description: 'Environments file'
+    required: false
+    default: ""
+  template:
+    description: 'Template input block'
+    required: false
+    default: ""
+  template-file:
+    description: 'Template file'
+    required: false
+    default: ""
+  template-path:
+    description: 'Template Path'
+    required: false
+    default: ""
+  github-step-summary:
+    description: 'Add the output to GITHUB_STEP_SUMMARY'
+    required: false
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Init
+      shell: bash
+      run: |
+        mkdir -p ./template
+
+    - if: ${{ inputs.env != '' }}
+      name: List of environments
+      shell: bash
+      run: |
+        echo "${{ inputs.env }}" | sed 's|=|: >- \n  |g' >> envFile.yaml
+        echo "::group::Environments file:"
+        cat envFile.yaml
+        echo "::endgroup::"
+    - if: ${{ inputs.env-file != '' }}
+      name: Environments file
+      shell: bash
+      run: |
+        cat "${{ inputs.env-files }}" >> envFile.yaml
+        echo "::group::Environments file:"
+        cat envFile.yaml
+        echo "::endgroup::"
+    - if: ${{ inputs.template != '' }}
+      name: Tuning the model
+      shell: bash
+      run: | 
+        echo "${{ inputs.template }}" > ./template/summary.txt.yaml
+        echo "::group::Summary Text File:"
+        cat ./template/summary.txt.yaml
+        echo "::endgroup::"
+    - if: ${{ inputs.template-file != '' }}
+      name: Tuning the model
+      shell: bash
+      run: | 
+        cp "${{ inputs.template-file }}" ./template
+    - if: ${{ inputs.template-path != '' }}
+      name: Tuning the model
+      shell: bash
+      run: | 
+        cd ${{ inputs.template-path }} && cp -Rv ./* ./template
+    - if: ${{ inputs.go-setup == 'true' }}
+      name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23.x'
+    - name: Installing GoModeler for Templates
+      shell: bash
+      run: |
+        go install github.com/toolsascode/gomodeler/cli@latest
+        
+    - name: Rendering template
+      shell: bash
+      run: | 
+        gomodeler -f ./envFile.yaml \ 
+        --template-path ./template \
+        --output-path ./outputs \
+        --log-level ${{ inputs.log-level }}
+
+    - if: ${{ inputs.github-step-summary == 'true' }}
+      name: Sent information to Step Summary
+      shell: bash
+      run: cat ./outputs/* >> $GITHUB_STEP_SUMMARY
