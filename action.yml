@@ -92,7 +92,7 @@ runs:
     - name: Installing GoModeler for Templates
       shell: bash
       run: |
-        go install github.com/toolsascode/gomodeler/cli@latest
+        go install github.com/toolsascode/gomodeler@latest
 
     - name: Rendering template
       shell: bash

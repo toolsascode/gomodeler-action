@@ -1,4 +1,21 @@
-{{- include "./.github/workflows/examples/complete/config.yaml" -}}
+# Summary Testing
+## Rendered
+### Report:
+
+<details>
+    <summary>Summary</summary>
+
+```json
+{{ .json_output }}
+```
+
+</details>
+
+### Details
+
+```yaml
+
+{{- include "./.github/workflows/examples/summary/config.yaml" -}}
 {{- $i := 1 }}
 Sum: {{ sum $i 10 }}
 Count: {{ count .files_path "/" }}
@@ -37,3 +54,5 @@ TextInCase : |
   {{ .kebabcaselower | kebabCaseLower }}
   {{ .kebabcaseupper | kebabCaseUpper }}
 {{ end }}
+
+```

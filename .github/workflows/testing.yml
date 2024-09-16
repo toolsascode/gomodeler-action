@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v3
       - uses: pre-commit/action@v3.0.1
-      - name: Testing complete
+      - name: Testing Complete
         uses: ./
         with:
           go-setup: true
@@ -18,3 +18,18 @@ jobs:
           environment-file: ./.github/workflows/examples/complete/envFile.yaml
           template-path: ./.github/workflows/examples/complete/templates
           output-path: ./.github/workflows/examples/complete/outputs
+      - name: View Report of Testing
+        shell: bash
+        run: |
+          cat ./.github/workflows/examples/complete/outputs/*
+      - name: Testing Summary
+        uses: ./
+        with:
+          go-setup: false
+          log-level: debug
+          environments:
+            json_output='{name/:/ "teste", nickname/:/ "new"}'
+          environment-file: ./.github/workflows/examples/summary/envFile.yaml
+          template-path: ./.github/workflows/examples/summary/templates
+          output-path: ./.github/workflows/examples/summary/outputs
+          github-step-summary: true
