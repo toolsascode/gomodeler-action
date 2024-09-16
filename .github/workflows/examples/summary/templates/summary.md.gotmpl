@@ -15,7 +15,7 @@
 
 ```yaml
 
-{{- include "./.github/workflows/examples/summary/config.yaml" -}}
+{{ include "./.github/workflows/examples/summary/config.yaml" -}}
 {{- $i := 1 }}
 Sum: {{ sum $i 10 }}
 Count: {{ count .files_path "/" }}
