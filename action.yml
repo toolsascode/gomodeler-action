@@ -2,7 +2,7 @@ name: 'Go Modeler for File Templates'
 description: 'Create and compile your file templates for deploy, Github Step Summary and others with ease.'
 
 branding:
-  icon: 'file-text'
+  icon: 'terminal'
   color: 'green'
 
 inputs:
@@ -49,14 +49,14 @@ runs:
     - name: Initial Configuration
       shell: bash
       run: |
-        mkdir -p ./template
-        mkdir -p "${{ inputs.output-path }}"
+        mkdir -p ./template && rm -rf ./template/*
+        mkdir -p "${{ inputs.output-path }}" && rm -rf "${{ inputs.output-path }}"/*
     - if: ${{ inputs.environments != '' }}
       name: List of environments
       shell: bash
       run: |
-        echo "${{ inputs.environments }}" | sed 's|=|: >- \n  |g' >> envFile.yaml
         echo "::group::Environments file:"
+        echo "${{ inputs.environments }}" | sed 's|=|: >- \n  |g' >> envFile.yaml
         cat envFile.yaml
         echo "::endgroup::"
     - if: ${{ inputs.environment-file != '' }}
@@ -76,15 +76,19 @@ runs:
         cat ./template/summary.txt.yaml
         echo "::endgroup::"
     - if: ${{ inputs.template-file != '' }}
-      name: Tuning the model
+      name: Template file
       shell: bash
       run: |
+        echo "::group::Template file"
         cp "${{ inputs.template-file }}" ./template
+        echo "::endgroup::"
     - if: ${{ inputs.template-path != '' }}
-      name: Tuning the model
+      name: Template path
       shell: bash
       run: |
-        cd ${{ inputs.template-path }} && cp -Rv ./* ./template
+        echo "::group::Template path"
+        cp -Rv ${{ inputs.template-path }}/* ./template
+        echo "::endgroup::"
     - if: ${{ inputs.go-setup == 'true' }}
       name: Setup Go
       uses: actions/setup-go@v5
@@ -99,11 +103,10 @@ runs:
       shell: bash
       run: |
 
-        echo "::group::Golang Env GOPATH/bin:"
+        echo "::notice title=Rendering template::Running the Go Modeler"
+        echo "::group::Running the Go Modeler"
         export PATH=${PATH}:$(go env GOPATH)/bin
-        echo "::endgroup::"
 
-        echo "::group::Running the Go Modeler:"
         gomodeler -f ./envFile.yaml --template-path ./template --output-path "${{ inputs.output-path }}" --log-level "${{ inputs.log-level }}"
         echo "::endgroup::"
 
@@ -113,4 +116,5 @@ runs:
       name: Sent information to Step Summary
       shell: bash
       run: |
+        echo "::notice title=GitHub Step Summary::Sent information to Step Summary"
         cat "${{ inputs.output-path }}/*" >> $GITHUB_STEP_SUMMARY
