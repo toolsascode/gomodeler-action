@@ -62,7 +62,7 @@ runs:
       name: Environments file
       shell: bash
       run: |
-        cat "${{ inputs.environment-files }}" >> envFile.yaml
+        cat "${{ inputs.environment-file }}" >> envFile.yaml
         echo "::group::Environments file:"
         cat envFile.yaml
         echo "::endgroup::"
