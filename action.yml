@@ -50,6 +50,7 @@ runs:
       shell: bash
       run: |
         mkdir -p ./template
+        mkdir -p "${{ inputs.output-path }}"
     - if: ${{ inputs.environments != '' }}
       name: List of environments
       shell: bash
@@ -99,7 +100,7 @@ runs:
       run: |
 
         echo "::group::Golang Env GOPATH/bin:"
-        export PATH=${PATH}:`go env GOPATH`/bin
+        export PATH=${PATH}:$(go env GOPATH)/bin
         echo "::endgroup::"
 
         echo "::group::Running the Go Modeler:"
