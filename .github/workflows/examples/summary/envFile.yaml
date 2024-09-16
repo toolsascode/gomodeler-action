@@ -1,6 +1,18 @@
-artifacts: |
-   dsdksldklskd;skldsdskdlskdsl;kd;sldksl;dl l dls ld kdslld;s;skldsdskdlskdsl
-metadata: |
-   moopgf opi gopfig pfig  gpfig pfigp fg gpf pgifpigfpi g gpfi gpfig fgi fp igfpgif
-coverage: |
-   github.com/toolsascode/gomodeler/internal/helpers coverage: 0.0% of statements github.com/toolsascode/gomodeler/cmd/gomodeler coverage: 0.0% of statements github.com/toolsascode/gomodeler/internal/template coverage: 0.0% of statements
+files: /gomodeler/files/file1.yaml /gomodeler/files/file2.json /gomodeler/files/file3.csv /gomodeler/files/file4.txt /gomodeler/files/file5.py
+files_path: ./templates/outputs
+working_dir: /gomodeler
+items:
+  - item1
+  - item2
+  - item3
+textIn:
+  upperCase: upper case testing
+  lowerCase: Upper Case Testing
+  titleCase: Title case testing
+  capitalCase: capital Case Testing
+  pascalCase: pascal case testing
+  camelCase: Camel case Testing
+  snakeCaseLower: Snake Case Lower Testing
+  snakeCaseUpper: Snake Case Upper Testing
+  kebabCaseLower: Kebab Case Lower Testing
+  kebabCaseUpper: Kebab Case Upper Testing
