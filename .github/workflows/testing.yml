@@ -27,8 +27,8 @@ jobs:
         with:
           go-setup: true
           log-level: debug
-          environments:
-            json_output='{name/:/ "teste", nickname/:/ "new"}'
+          # environments:
+          #   json_output='{name/:/ "teste", nickname/:/ "new"}'
           environment-file: ./.github/workflows/examples/summary/envFile.yaml
           template-path: ./.github/workflows/examples/summary/templates
           output-path: ./.github/workflows/examples/summary/outputs
