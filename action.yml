@@ -97,14 +97,18 @@ runs:
     - name: Rendering template
       shell: bash
       run: |
+
+        echo "::group::Golang Env GOPATH/bin:"
         export PATH=${PATH}:`go env GOPATH`/bin
-        echo "::group::Running the Go Modeler:"
-        gomodeler -f ./envFile.yaml \
-        --template-path ./template \
-        --output-path "${{ inputs.output-path }}" \
-        --log-level "${{ inputs.log-level }}"
         echo "::endgroup::"
+
+        echo "::group::Running the Go Modeler:"
+        gomodeler -f ./envFile.yaml --template-path ./template --output-path "${{ inputs.output-path }}" --log-level "${{ inputs.log-level }}"
+        echo "::endgroup::"
+
     - if: ${{ inputs.github-step-summary == 'true' }}
       name: Sent information to Step Summary
       shell: bash
-      run: cat "${{ inputs.output-path }}/*" >> $GITHUB_STEP_SUMMARY
+      run: |
+        ls -la ${{ inputs.output-path }}
+        cat "${{ inputs.output-path }}/*" >> $GITHUB_STEP_SUMMARY
