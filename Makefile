@@ -8,7 +8,7 @@ all: help
 test:
 	@echo #####
 	@echo ##### Installing GoModeler
-	go install github.com/toolsascode/gomodeler@latest
+	go install -v github.com/toolsascode/gomodeler@latest
 	@echo ##### Running :: Testing Complete
 	$(GOBIN)/gomodeler -f ./.github/workflows/examples/complete/envFile.yaml \
         --template-path ./.github/workflows/examples/complete/templates \
