@@ -50,19 +50,19 @@ runs:
       shell: bash
       run: |
         mkdir -p ./template
-    - if: ${{ inputs.env != '' }}
+    - if: ${{ inputs.environments != '' }}
       name: List of environments
       shell: bash
       run: |
-        echo "${{ inputs.env }}" | sed 's|=|: >- \n  |g' >> envFile.yaml
+        echo "${{ inputs.environments }}" | sed 's|=|: >- \n  |g' >> envFile.yaml
         echo "::group::Environments file:"
         cat envFile.yaml
         echo "::endgroup::"
-    - if: ${{ inputs.env-file != '' }}
+    - if: ${{ inputs.environment-file != '' }}
       name: Environments file
       shell: bash
       run: |
-        cat "${{ inputs.env-files }}" >> envFile.yaml
+        cat "${{ inputs.environment-files }}" >> envFile.yaml
         echo "::group::Environments file:"
         cat envFile.yaml
         echo "::endgroup::"
