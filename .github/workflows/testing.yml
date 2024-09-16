@@ -25,7 +25,7 @@ jobs:
       - name: Testing Summary
         uses: ./
         with:
-          go-setup: false
+          go-setup: true
           log-level: debug
           environments:
             json_output='{name/:/ "teste", nickname/:/ "new"}'
