@@ -111,11 +111,13 @@ runs:
         gomodeler -f ./envFile.yaml --template-path ./template --output-path "${{ inputs.output-path }}" --log-level "${{ inputs.log-level }}"
         echo "::endgroup::"
 
+        echo "::group::${{ inputs.output-path }}"
         ls -la ${{ inputs.output-path }}
+        echo "::endgroup::"
 
     - if: ${{ inputs.github-step-summary == 'true' }}
       name: Sent information to Step Summary
       shell: bash
       run: |
         echo "::notice title=GitHub Step Summary::Sent information to Step Summary"
-        cat "${{ inputs.output-path }}/*" >> $GITHUB_STEP_SUMMARY
+        cat ${{ inputs.output-path }}/* >> $GITHUB_STEP_SUMMARY
