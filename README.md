@@ -77,5 +77,7 @@ Please refer to the [release page](https://github.com/toolsascode/gomodeler/rele
     github-step-summary: true
 ```
 
+**See example:** <https://github.com/toolsascode/gomodeler-action/actions/runs/10893938906>
+
 ## License
 The scripts and documentation in this project are released under the [MIT License](./LICENSE.md)
