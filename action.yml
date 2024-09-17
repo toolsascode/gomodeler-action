@@ -90,11 +90,23 @@ runs:
         echo "::group::Template path"
         cp -Rv ${{ inputs.template-path }}/* ./template
         echo "::endgroup::"
-    - if: ${{ inputs.go-setup == 'true' }}
+    - name: Check if Golang command exists.
+      id: golang-exists
+      shell: bash
+      run: |
+        if command -v go &> /dev/null
+        then
+          echo "installed=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "installed=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - if: ${{ inputs.go-setup == 'true' && steps.golang-exists.outputs.installed == 'false' }}
       name: Setup Go
       uses: actions/setup-go@v5
       with:
         go-version: '1.23.x'
+        cache: false
     - name: Installing GoModeler for Templates
       shell: bash
       run: |
