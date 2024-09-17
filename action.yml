@@ -7,31 +7,31 @@ branding:
 
 inputs:
   go-setup:
-    description: 'Go setup'
+    description: 'By default, Golang installation is enabled for binary installation via `go install` command.'
     required: false
     default: 'true'
   log-level:
-    description: 'Log level [debug, info, warn, error, fatal, panic]'
+    description: 'Expected log level in application output. Currently the following options are supported: debug, info, warn, error, fatal or panic'
     required: false
     default: 'info'
   environments:
-    description: 'List of environments'
+    description: 'List of environment variables in key=value format'
     required: false
     default: ""
   environment-file:
-    description: 'Environments file'
+    description: 'Environment variables file in YAML or JSON format.'
     required: false
     default: ""
   template:
-    description: 'Template input block'
+    description: 'gotemplate code block to be rendered.'
     required: false
     default: ""
   template-file:
-    description: 'Template file'
+    description: 'List of template files for rendering.'
     required: false
     default: ""
   template-path:
-    description: 'Template Path'
+    description: 'Path of template files for rendering.'
     required: false
     default: ""
   output-path:
@@ -39,7 +39,7 @@ inputs:
     required: false
     default: "./outputs"
   github-step-summary:
-    description: 'Add the output to GITHUB_STEP_SUMMARY'
+    description: 'Add rendered content to GITHUB_STEP_SUMMARY output.'
     required: false
     default: 'false'
 
@@ -104,7 +104,6 @@ runs:
       shell: bash
       run: |
 
-        echo "::notice title=Rendering template::Running the Go Modeler"
         echo "::group::Running the Go Modeler"
         export PATH=${PATH}:$(go env GOPATH)/bin
 
@@ -119,5 +118,4 @@ runs:
       name: Sent information to Step Summary
       shell: bash
       run: |
-        echo "::notice title=GitHub Step Summary::Sent information to Step Summary"
         cat ${{ inputs.output-path }}/* >> $GITHUB_STEP_SUMMARY
