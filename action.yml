@@ -49,9 +49,9 @@ runs:
     - name: Initial Configuration
       shell: bash
       run: |
-        echo "GOMODELER_PATH=${{ github.action_path }}/gomodeler-${{ github.sha }}" >> $GITHUB_ENV
-        echo "GOMODELER_PATH_TEMPLATE=${{ github.action_path }}/gomodeler-${{ github.sha }}/template" >> $GITHUB_ENV
-        echo "GOMODELER_PATH_OUTPUT=${{ github.action_path }}/gomodeler-${{ github.sha }}/${{ inputs.output-path }}" >> $GITHUB_ENV
+        echo "GOMODELER_PATH=${{ github.action_path }}${{ github.sha }}" >> $GITHUB_ENV
+        echo "GOMODELER_PATH_TEMPLATE=${{ github.action_path }}${{ github.sha }}/template" >> $GITHUB_ENV
+        echo "GOMODELER_PATH_OUTPUT=${{ github.action_path }}${{ github.sha }}/${{ inputs.output-path }}" >> $GITHUB_ENV
         
         mkdir -p "${{ env.GOMODELER_PATH_TEMPLATE }}" && rm -rf ${{ env.GOMODELER_PATH_TEMPLATE }}/*
         mkdir -p "${{ env.GOMODELER_PATH_OUTPUT }}" && rm -rf ${{ env.GOMODELER_PATH_OUTPUT }}/*
