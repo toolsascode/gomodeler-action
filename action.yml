@@ -49,9 +49,9 @@ runs:
     - name: Initial Configuration
       shell: bash
       run: |
-        echo "GOMODELER_PATH=$GITHUB_ACTION_PATH" >> "$GITHUB_ENV"
-        echo "GOMODELER_PATH_TEMPLATE=$GITHUB_ACTION_PATH/templates" >> "$GITHUB_ENV"
-        echo "GOMODELER_PATH_OUTPUT=$GITHUB_ACTION_PATH/outputs" >> "$GITHUB_ENV"
+        echo "GOMODELER_PATH=${GITHUB_ACTION_PATH:-./}" >> "$GITHUB_ENV"
+        echo "GOMODELER_PATH_TEMPLATE=${GITHUB_ACTION_PATH:-./}/templates" >> "$GITHUB_ENV"
+        echo "GOMODELER_PATH_OUTPUT=${GITHUB_ACTION_PATH:-./}/outputs" >> "$GITHUB_ENV"
 
         mkdir -p "$GOMODELER_PATH_TEMPLATE" && rm -rf $GOMODELER_PATH_TEMPLATE/*
         mkdir -p "$GOMODELER_PATH_OUTPUT" && rm -rf $GOMODELER_PATH_OUTPUT/*
