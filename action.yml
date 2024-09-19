@@ -127,7 +127,7 @@ runs:
         echo "::group::Running the Go Modeler"
         export PATH=${PATH}:$(go env GOPATH)/bin
 
-        gomodeler -f ./envFile.yaml --template-path $GOMODELER_PATH_TEMPLATE \
+        gomodeler -f $GOMODELER_PATH/envFile.yaml --template-path $GOMODELER_PATH_TEMPLATE \
         --output-path "$GOMODELER_PATH_OUTPUT" --log-level "${{ inputs.log-level }}"
         
         cp $GOMODELER_PATH_OUTPUT/* "${{ inputs.output-path }}"
