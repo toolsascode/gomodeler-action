@@ -47,48 +47,56 @@ runs:
   using: "composite"
   steps:
     - name: Initial Configuration
+      env:
+        GOMODELER_PATH: /home/runner/work/_actions/toolsascode/gomodeler-action/x
+        GOMODELER_PATH_TEMPLATE: /home/runner/work/_actions/toolsascode/gomodeler-action/x/templates
+        GOMODELER_PATH_OUTPUT: /home/runner/work/_actions/toolsascode/gomodeler-action/x/outputs
       shell: bash
       run: |
-        mkdir -p ./template && rm -rf ./template/*
-        mkdir -p "${{ inputs.output-path }}" && rm -rf "${{ inputs.output-path }}"/*
-        echo "" > envFile.yaml
+        echo "GOMODELER_PATH=$GOMODELER_PATH" >> "$GITHUB_ENV"
+        echo "GOMODELER_PATH_TEMPLATE=$GOMODELER_PATH_TEMPLATE" >> "$GITHUB_ENV"
+        echo "GOMODELER_PATH_OUTPUT=$GOMODELER_PATH_OUTPUT" >> "$GITHUB_ENV"
+        mkdir -p "$GOMODELER_PATH_TEMPLATE" && rm -rf $GOMODELER_PATH_TEMPLATE/*
+        mkdir -p "$GOMODELER_PATH_OUTPUT" && rm -rf $GOMODELER_PATH_OUTPUT/*
+        mkdir -p "${{ inputs.output-path }}"
+        echo "" > $GOMODELER_PATH/envFile.yaml
     - if: ${{ inputs.environments != '' }}
       name: List of environments
       shell: bash
       run: |
         echo "::group::Environments file:"
-        echo "${{ inputs.environments }}" | sed 's|=|: >- \n  |g' >> envFile.yaml
-        cat envFile.yaml
+        echo "${{ inputs.environments }}" | sed 's|=|: >- \n  |g' >> $GOMODELER_PATH/envFile.yaml
+        cat $GOMODELER_PATH/envFile.yaml
         echo "::endgroup::"
     - if: ${{ inputs.environment-file != '' }}
       name: Environments file
       shell: bash
       run: |
-        cat "${{ inputs.environment-file }}" >> envFile.yaml
+        cat "${{ inputs.environment-file }}" >> $GOMODELER_PATH/envFile.yaml
         echo "::group::Environments file:"
-        cat envFile.yaml
+        cat $GOMODELER_PATH/envFile.yaml
         echo "::endgroup::"
     - if: ${{ inputs.template != '' }}
       name: Tuning the model
       shell: bash
       run: |
-        echo "${{ inputs.template }}" > ./template/summary.txt.yaml
+        echo "${{ inputs.template }}" > $GOMODELER_PATH_TEMPLATE/summary.txt.yaml
         echo "::group::Summary Text File:"
-        cat ./template/summary.txt.yaml
+        cat $GOMODELER_PATH_TEMPLATE/summary.txt.yaml
         echo "::endgroup::"
     - if: ${{ inputs.template-file != '' }}
       name: Template file
       shell: bash
       run: |
         echo "::group::Template file"
-        cp "${{ inputs.template-file }}" ./template
+        cp "${{ inputs.template-file }}" $GOMODELER_PATH_TEMPLATE
         echo "::endgroup::"
     - if: ${{ inputs.template-path != '' }}
       name: Template path
       shell: bash
       run: |
         echo "::group::Template path"
-        cp -Rv ${{ inputs.template-path }}/* ./template
+        cp -Rv ${{ inputs.template-path }}/* $GOMODELER_PATH_TEMPLATE
         echo "::endgroup::"
     - name: Check if Golang command exists.
       id: golang-exists
@@ -119,7 +127,11 @@ runs:
         echo "::group::Running the Go Modeler"
         export PATH=${PATH}:$(go env GOPATH)/bin
 
-        gomodeler -f ./envFile.yaml --template-path ./template --output-path "${{ inputs.output-path }}" --log-level "${{ inputs.log-level }}"
+        gomodeler -f $GOMODELER_PATH/envFile.yaml --template-path $GOMODELER_PATH_TEMPLATE \
+        --output-path "$GOMODELER_PATH_OUTPUT" --log-level "${{ inputs.log-level }}"
+        
+        cp $GOMODELER_PATH_OUTPUT/* "${{ inputs.output-path }}"
+        
         echo "::endgroup::"
 
         echo "::group::${{ inputs.output-path }}"
@@ -130,4 +142,4 @@ runs:
       name: Sent information to Step Summary
       shell: bash
       run: |
-        cat ${{ inputs.output-path }}/* >> $GITHUB_STEP_SUMMARY
+        cat $GOMODELER_PATH_OUTPUT/* >> $GITHUB_STEP_SUMMARY
