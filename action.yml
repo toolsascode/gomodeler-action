@@ -47,12 +47,15 @@ runs:
   using: "composite"
   steps:
     - name: Initial Configuration
+      env:
+        GOMODELER_PATH: /home/runner/work/_actions/toolsascode/gomodeler-action/x
+        GOMODELER_PATH_TEMPLATE: /home/runner/work/_actions/toolsascode/gomodeler-action/x/templates
+        GOMODELER_PATH_OUTPUT: /home/runner/work/_actions/toolsascode/gomodeler-action/x/outputs
       shell: bash
       run: |
-        echo "GOMODELER_PATH=/home/runner/work/_actions/toolsascode/gomodeler-action/x" >> "$GITHUB_ENV"
-        echo "GOMODELER_PATH_TEMPLATE=/home/runner/work/_actions/toolsascode/gomodeler-action/x/templates" >> "$GITHUB_ENV"
-        echo "GOMODELER_PATH_OUTPUT=/home/runner/work/_actions/toolsascode/gomodeler-action/x/outputs" >> "$GITHUB_ENV"
-
+        echo "GOMODELER_PATH=$GOMODELER_PATH" >> "$GITHUB_ENV"
+        echo "GOMODELER_PATH_TEMPLATE=$GOMODELER_PATH_TEMPLATE" >> "$GITHUB_ENV"
+        echo "GOMODELER_PATH_OUTPUT=$GOMODELER_PATH_OUTPUT" >> "$GITHUB_ENV"
         mkdir -p "$GOMODELER_PATH_TEMPLATE" && rm -rf $GOMODELER_PATH_TEMPLATE/*
         mkdir -p "$GOMODELER_PATH_OUTPUT" && rm -rf $GOMODELER_PATH_OUTPUT/*
         mkdir -p "${{ inputs.output-path }}"
