@@ -46,9 +46,9 @@ inputs:
 runs:
   using: "composite"
   env:
-    GOMODELER_PATH: "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-    GOMODELER_PATH_TEMPLATE: "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/template"
-    GOMODELER_PATH_OUTPUT: "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/outputs"
+    GOMODELER_PATH: "~/gomodeler/runs"
+    GOMODELER_PATH_TEMPLATE: "~/gomodeler/runs/template"
+    GOMODELER_PATH_OUTPUT: "~/gomodeler/runs/outputs"
   steps:
     - name: Initial Configuration
       shell: bash
