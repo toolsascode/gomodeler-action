@@ -45,14 +45,14 @@ inputs:
 
 runs:
   using: "composite"
+  env:
+    GOMODELER_PATH: "${{ github.action_path }}${{ github.sha }}"
+    GOMODELER_PATH_TEMPLATE: "${{ github.action_path }}${{ github.sha }}/template"
+    GOMODELER_PATH_OUTPUT: "${{ github.action_path }}${{ github.sha }}/outputs"
   steps:
     - name: Initial Configuration
       shell: bash
-      run: |
-        echo "GOMODELER_PATH=${{ github.action_path }}${{ github.sha }}" >> $GITHUB_ENV
-        echo "GOMODELER_PATH_TEMPLATE=${{ github.action_path }}${{ github.sha }}/template" >> $GITHUB_ENV
-        echo "GOMODELER_PATH_OUTPUT=${{ github.action_path }}${{ github.sha }}/${{ inputs.output-path }}" >> $GITHUB_ENV
-        
+      run: |        
         mkdir -p "${{ env.GOMODELER_PATH_TEMPLATE }}" && rm -rf ${{ env.GOMODELER_PATH_TEMPLATE }}/*
         mkdir -p "${{ env.GOMODELER_PATH_OUTPUT }}" && rm -rf ${{ env.GOMODELER_PATH_OUTPUT }}/*
         mkdir -p "${{ inputs.output-path }}"
