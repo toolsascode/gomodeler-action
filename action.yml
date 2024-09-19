@@ -49,9 +49,9 @@ runs:
     - name: Initial Configuration
       shell: bash
       run: |
-        echo "GOMODELER_PATH=${GITHUB_ACTION_PATH:-./}" >> "$GITHUB_ENV"
-        echo "GOMODELER_PATH_TEMPLATE=${GITHUB_ACTION_PATH:-./}/templates" >> "$GITHUB_ENV"
-        echo "GOMODELER_PATH_OUTPUT=${GITHUB_ACTION_PATH:-./}/outputs" >> "$GITHUB_ENV"
+        echo "GOMODELER_PATH=/home/runner/work/_actions/toolsascode/gomodeler-action/x" >> "$GITHUB_ENV"
+        echo "GOMODELER_PATH_TEMPLATE=/home/runner/work/_actions/toolsascode/gomodeler-action/x/templates" >> "$GITHUB_ENV"
+        echo "GOMODELER_PATH_OUTPUT=/home/runner/work/_actions/toolsascode/gomodeler-action/x/outputs" >> "$GITHUB_ENV"
 
         mkdir -p "$GOMODELER_PATH_TEMPLATE" && rm -rf $GOMODELER_PATH_TEMPLATE/*
         mkdir -p "$GOMODELER_PATH_OUTPUT" && rm -rf $GOMODELER_PATH_OUTPUT/*
