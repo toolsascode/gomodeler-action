@@ -6,10 +6,6 @@ branding:
   color: 'green'
 
 inputs:
-  go-setup:
-    description: 'By default, Golang installation is enabled for binary installation via `go install` command.'
-    required: false
-    default: 'true'
   log-level:
     description: 'Expected log level in application output. Currently the following options are supported: debug, info, warn, error, fatal or panic'
     required: false
@@ -98,27 +94,11 @@ runs:
         echo "::group::Template path"
         cp -Rv ${{ inputs.template-path }}/* $GOMODELER_PATH_TEMPLATE
         echo "::endgroup::"
-    - name: Check if Golang command exists.
-      id: golang-exists
-      shell: bash
-      run: |
-        if command -v go &> /dev/null
-        then
-          echo "installed=true" >> "$GITHUB_OUTPUT"
-        else
-          echo "installed=false" >> "$GITHUB_OUTPUT"
-        fi
 
-    - if: ${{ inputs.go-setup == 'true' && steps.golang-exists.outputs.installed == 'false' }}
-      name: Setup Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.23.x'
-        cache: false
     - name: Installing GoModeler for Templates
       shell: bash
       run: |
-        go install github.com/toolsascode/gomodeler@latest
+        curl -fLSs https://raw.githubusercontent.com/toolsascode/gomodeler/main/scripts/install.sh | bash
 
     - name: Rendering template
       shell: bash

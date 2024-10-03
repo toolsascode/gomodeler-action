@@ -16,9 +16,6 @@ Please refer to the [release page](https://github.com/toolsascode/gomodeler/rele
 ```yaml
 - uses: toolsascode/gomodeler-action@v1
   with:
-    # By default, Golang installation is enabled for binary installation via `go install` command.
-    # Default: true
-    go-setup: true
     # Expected log level in application output.
     # Currently the following options are supported: debug, info, warn, error, fatal or panic
     # Default: info
@@ -50,7 +47,9 @@ Please refer to the [release page](https://github.com/toolsascode/gomodeler/rele
 
 ## Examples
 
-### Render templates
+<details>
+
+<summary><b>Render templates</b></summary>
 
 - This model is useful for those who only expect to compile the file and use the file for other tasks.
 
@@ -63,7 +62,11 @@ Please refer to the [release page](https://github.com/toolsascode/gomodeler/rele
     output-path: /path/to/outputs
 ```
 
-### Add rendered content to GitHub Step Summary
+</details>
+
+<details>
+
+<summary><b>Add rendered content to GitHub Step Summary</b></summary>
 
 - In this case, in addition to compiling, the file is automatically added to GITHUB_STEP_SUMMARY.
 
@@ -77,7 +80,79 @@ Please refer to the [release page](https://github.com/toolsascode/gomodeler/rele
     github-step-summary: true
 ```
 
+</details>
+
+<details>
+
+<summary><b>Customizing the GitHub Actions Summary</b></summary>
+
+- A small example of how you can create your custom template file.
+- In this case, in addition to compiling, the file is automatically added to GITHUB_STEP_SUMMARY.
+
+1. Create the Template file: `summary.md.gotmpl`
+
+```yaml
+## {{ .title }}
+{{ if or (empty .active_details) (.active_details | default "true" | bool) }}
+<details>
+    <summary><b>{{ .subtitle | default "Output" }}</b></summary>
+
+{{ if or (empty .split_file) (not .split_file | default "false" | bool) }}
+'``{{ .extension | default "yaml" }}
+{{ include .filename | trim }}
+'``
+{{ else }}
+'``{{ .extension | default "yaml" }}
+{{ range (include .filename) | trim | arrayStr -}}
+{{- $file := . }}
+{{- if not (empty "$file") }}
+{{- $file }}
+{{- end }}
+{{ end -}}
+'``
+{{ end }}
+</details>
+{{ end -}}
+```
+
+2. Add Workflow
+
+```yaml
+  - name: Checkout
+    uses: actions/checkout@v4
+  - uses: dorny/paths-filter@v3
+    id: filter
+    with:
+      list-files: shell
+      filters: |
+        files:
+          - added|modified: '*.go'
+
+  - name: Generate Output files
+    run: |
+      echo "${{ steps.filter.outputs.files }}" > ./files.out
+
+  - name: Step Summary - Flow files changes
+    uses: toolsascode/gomodeler-action@v1
+    with:
+      log-level: debug
+      environments: |
+        title=Files Changes
+        subtitle=Output
+        extension=shell
+        active_details=true
+        split_file=true
+        filename=./files.out
+      template-file: ./templates/summary.md.gotmpl
+      github-step-summary: true
+```
+
+</details>
+
+### Others
+
 **See example:** <https://github.com/toolsascode/gomodeler-action/actions/runs/10893938906>
 
 ## License
+
 The scripts and documentation in this project are released under the [MIT License](./LICENSE.md)
